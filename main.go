@@ -60,6 +60,10 @@ func createBook(c *gin.Context) {
 	c.JSON(http.StatusCreated, input)
 }
 
+// Done Step 4:
+
+// Prepare for Step 5: Add PUT(update books by id) and DELETE(delete book by id)-- Full CRUD learnings
+
 // Setup the Gin server and first route (GET /books)
 func main() {
 	initDB() // Connect to DB and create table
