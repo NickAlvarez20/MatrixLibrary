@@ -12,7 +12,7 @@ type Book struct {
 	ID     uint   `json:"id" gorm:"primaryKey"`
 	Title  string `json:"title" binding:"required" gorm:"not null"`
 	Author string `json:"author" binding:"required" gorm:"not null"`
-	Year   int    `json:"year" binding:"required,min=1440, max=2026"`
+	Year   int    `json:"year" binding:"required,min=1440,max=2026"`
 }
 
 var db *gorm.DB
@@ -40,14 +40,37 @@ func getBooks(c *gin.Context) {
 	c.JSON(http.StatusOK, books)
 }
 
+// POST /books - create a new book
+func createBook(c *gin.Context) {
+	var input Book
+
+	// Bind and validate JSON input
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Save to database
+	if result := db.Create(&input); result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create book"})
+		return
+	}
+
+	// Return created book with 201 status
+	c.JSON(http.StatusCreated, input)
+}
+
 // Setup the Gin server and first route (GET /books)
 func main() {
 	initDB() // Connect to DB and create table
 
 	r := gin.Default() // Create Gin router with default middleware(logger, recovery)
 
-	// Our first route: GET /books -> return all books
+	// Our first route: GET /books -> returns all books
 	r.GET("/books", getBooks)
+
+	// Create second route: POST / books -> creates a new book
+	r.POST("/books", createBook)
 
 	// Start server
 	r.Run(":8080") // Listen on http://localhost:8080
