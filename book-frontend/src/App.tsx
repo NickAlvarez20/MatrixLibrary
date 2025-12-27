@@ -86,7 +86,7 @@ function App() {
       .catch((error) => {
         console.error("Error fetching books:", error);
       });
-  }, []); // Empty array = run only once when component mounts
+  }, []); // Empty array = run only once when component mount
 
   const filteredBooks = books.filter(
     (book) =>
