@@ -1,7 +1,11 @@
 {
   "rewrites": [
     {
-      "source": "/api/(.*)",
+      "source": "/api/books",
+      "destination": "/api/books.go"
+    },
+    {
+      "source": "/api/books/:id",
       "destination": "/api/books.go"
     }
   ]

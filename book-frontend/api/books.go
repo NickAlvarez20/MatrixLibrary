@@ -119,10 +119,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	router.Use(gin.Recovery())
 
 	// Routes
-	router.GET("/books", getBooks)
-	router.POST("/books", createBook)
-	router.PUT("/books/:id", updateBook)
-	router.DELETE("/books/:id", deleteBook)
+	router.GET("/api/books", getBooks)
+	router.POST("/api/books", createBook)
+	router.PUT("/api/books/:id", updateBook)
+	router.DELETE("/api/books/:id", deleteBook)
 
 	// Handle CORS
 	if r.Method == "OPTIONS" {
