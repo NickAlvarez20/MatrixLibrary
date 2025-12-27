@@ -1,0 +1,166 @@
+:root {
+  --bg-gradient: linear-gradient(to bottom, #1e3a8a, #1e40af, #3b82f6);
+  --card-bg: rgba(255, 255, 255, 0.15);
+  --card-border: rgba(255, 255, 255, 0.2);
+  --text-primary: #f0f9ff;
+  --text-secondary: #cbd5e1;
+  --accent: #60a5fa;
+  --accent-hover: #3b82f6;
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+  --success: #10b981;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+  background: var(--bg-gradient);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+#root {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #ffd700;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+}
+
+.form-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--card-border);
+  margin-bottom: 3rem;
+}
+
+.form-card input {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  color: white;
+  outline: none;
+  margin-bottom: 1rem;
+}
+
+.form-card input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+}
+
+.form-card button {
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.form-card button:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+.book-count {
+  font-size: 1.6rem;
+  color: #ffd700;
+  margin: 2rem 0;
+}
+
+.book-list {
+  list-style: none;
+  padding: 0;
+}
+
+.book-item {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--card-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.book-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.book-info h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.4rem;
+  color: white;
+}
+
+.book-info p {
+  margin: 0.3rem 0;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+.book-actions button {
+  padding: 0.8rem 1.5rem;
+  background: var(--danger);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.book-actions button:hover {
+  background: var(--danger-hover);
+  transform: translateY(-2px);
+}
+
+.empty-state {
+  font-size: 1.4rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-top: 4rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #root {
+    padding: 1rem;
+  }
+  h1 {
+    font-size: 2.5rem;
+  }
+  .form-card {
+    padding: 1.5rem;
+  }
+  .book-item {
+    flex-direction: column;
+    text-align: left;
+    gap: 1rem;
+  }
+  .book-actions {
+    align-self: flex-end;
+  }
+}
