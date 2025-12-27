@@ -12,6 +12,8 @@ type Book = {
 function App() {
   const [books, setBooks] = useState<Book[]>([]);
   const [newBook, setNewBook] = useState({ title: "", author: "", year: "" });
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editForm, setEditForm] = useState({ title: "", author: "", year: "" });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,6 +47,27 @@ function App() {
       setBooks(books.filter((book) => book.id !== id)); // instant removal
     } else {
       console.error("Failed to delete book");
+    }
+  };
+
+  const handleUpdate = async (id: number) => {
+    const response = await fetch(`http://localhost:8080/books/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: editForm.title || undefined,
+        author: editForm.author || undefined,
+        year: editForm.year ? parseInt(editForm.year) : undefined,
+      }),
+    });
+
+    if (response.ok) {
+      const updatedBook = await response.json();
+      setBooks(books.map((book) => (book.id === id ? updatedBook : book)));
+      setEditingId(null);
+      setEditForm({ title: "", author: "", year: "" });
+    } else {
+      console.error("Failed to update book");
     }
   };
 
@@ -110,14 +133,69 @@ function App() {
             {" "}
             {books.map((book) => (
               <li key={book.id} className="book-item">
-                <div className="book-info">
-                  <h3>{book.title}</h3>
-                  <p>by {book.author}</p>
-                  <p>Published: {book.year}</p>
-                </div>
-                <div className="book-actions">
-                  <button onClick={() => handleDelete(book.id)}>Delete</button>
-                </div>
+                {editingId === book.id ? (
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleUpdate(book.id);
+                    }}
+                    className="add-form"
+                  >
+                    <input
+                      type="text"
+                      value={editForm.title}
+                      placeholder={book.title}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, title: e.target.value })
+                      }
+                    />
+                    <input
+                      type="text"
+                      value={editForm.author}
+                      placeholder={book.author}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, author: e.target.value })
+                      }
+                    />
+                    <input
+                      type="number"
+                      value={editForm.year}
+                      placeholder={book.year.toString()}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, year: e.target.value })
+                      }
+                    />
+                    <button type="submit">Save</button>
+                    <button type="button" onClick={() => setEditingId(null)}>
+                      Cancel
+                    </button>
+                  </form>
+                ) : (
+                  <>
+                    <div className="book-info">
+                      <h3>{book.title}</h3>
+                      <p>by {book.author}</p>
+                      <p>Published: {book.year}</p>
+                    </div>
+                    <div className="book-actions">
+                      <button
+                        onClick={() => {
+                          setEditingId(book.id);
+                          setEditForm({
+                            title: book.title,
+                            author: book.author,
+                            year: book.year.toString(),
+                          });
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button onClick={() => handleDelete(book.id)}>
+                        Delete
+                      </button>
+                    </div>
+                  </>
+                )}
               </li>
             ))}
           </ul>
