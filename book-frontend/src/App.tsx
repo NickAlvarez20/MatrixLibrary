@@ -36,6 +36,18 @@ function App() {
     }
   };
 
+  const handleDelete = async (id: number) => {
+    const response = await fetch(`http://localhost:8080/books/${id}`, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      setBooks(books.filter((book) => book.id !== id)); // instant removal
+    } else {
+      console.error("Failed to delete book");
+    }
+  };
+
   useEffect(() => {
     fetch("http://localhost:8080/books")
       .then((response) => {
@@ -102,6 +114,9 @@ function App() {
                   <h3>{book.title}</h3>
                   <p>by {book.author}</p>
                   <p>Published: {book.year}</p>
+                </div>
+                <div className="book-actions">
+                  <button onClick={() => handleDelete(book.id)}>Delete</button>
                 </div>
               </li>
             ))}
