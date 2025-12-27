@@ -20,7 +20,7 @@ function App() {
     e.preventDefault();
     if (!newBook.title || !newBook.author || !newBook.year) return;
 
-    const response = await fetch("http://localhost:8080/books", {
+    const response = await fetch("/api/books", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -40,7 +40,7 @@ function App() {
   };
 
   const handleDelete = async (id: number) => {
-    const response = await fetch(`http://localhost:8080/books/${id}`, {
+    const response = await fetch(`/api/books/${id}`, {
       method: "DELETE",
     });
 
@@ -52,7 +52,7 @@ function App() {
   };
 
   const handleUpdate = async (id: number) => {
-    const response = await fetch(`http://localhost:8080/books/${id}`, {
+    const response = await fetch(`/api/books/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -73,7 +73,7 @@ function App() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:8080/books")
+    fetch("/api/books")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch books");
