@@ -96,27 +96,30 @@ function App() {
 
   return (
     <div>
-      {/* Search Bar */}
-      <div
-        className="form-card"
-        style={{ marginTop: "0", marginBottom: "30px" }}
-      >
+      {/* Search Bar — responsive and centered */}
+      <div className="search-bar-container">
         <input
           type="text"
           placeholder="Search by title or author..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "16px 20px",
-            fontSize: "1.2rem",
-            background: "rgba(255, 255, 255, 0.2)",
-            border: "2px solid rgba(255,255,255,0.4)",
-            borderRadius: "12px",
-            color: "white",
-            outline: "none",
-          }}
         />
+      </div>
+      <div className="matrix-rain">
+        {Array.from({ length: 20 }).map((_, i) => (
+          <span
+            key={i}
+            style={{
+              left: `${i * 5}%`,
+              animationDelay: `${Math.random() * 10}s`,
+              animationDuration: `${10 + Math.random() * 20}s`,
+            }}
+          >
+            {Array.from({ length: 20 })
+              .map(() => String.fromCharCode(0x30a0 + Math.random() * 96))
+              .join("")}
+          </span>
+        ))}
       </div>
       <div className="content-wrapper">
         <h1>My Book Library</h1>
