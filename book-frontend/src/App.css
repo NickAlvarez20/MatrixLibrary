@@ -109,6 +109,13 @@ h1 {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
 }
 
+/* Center book info — key fix */
+.book-info {
+  flex: 1;
+  text-align: center;
+  min-width: 0; /* Allows text to wrap properly */
+}
+
 .book-info h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.4rem;
@@ -144,23 +151,69 @@ h1 {
   margin-top: 4rem;
 }
 
-/* Responsive */
+/* Responsive Design — Mobile First */
 @media (max-width: 768px) {
   #root {
     padding: 1rem;
   }
+
   h1 {
     font-size: 2.5rem;
   }
+
   .form-card {
     padding: 1.5rem;
   }
+
+  .form-card input,
+  .form-card button {
+    font-size: 1.1rem;
+    padding: 14px 16px;
+  }
+
   .book-item {
     flex-direction: column;
-    text-align: left;
+    text-align: center;
+    align-items: center;
     gap: 1rem;
   }
+
+  .book-info {
+    flex: none;
+    width: 100%;
+  }
+
   .book-actions {
-    align-self: flex-end;
+    margin-left: 0;
+    align-self: center;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2.2rem;
+  }
+
+  .form-card input,
+  .form-card button {
+    font-size: 1rem;
+    padding: 12px 14px;
+  }
+
+  .book-info h3 {
+    font-size: 1.3rem;
+  }
+}
+
+/* Tablet & Desktop Fine-tuning */
+@media (min-width: 769px) and (max-width: 1024px) {
+  h1 {
+    font-size: 3rem;
+  }
+}
+
+@media (min-width: 1025px) {
+  h1 {
+    font-size: 3.5rem;
   }
 }

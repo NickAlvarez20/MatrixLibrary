@@ -29,7 +29,30 @@ function App() {
   return (
     <div>
       <h1>My Book Library</h1>
-      <p>You have {books.length} books.</p>
+      <p className="book-count">
+        You have {books.length} {books.length === 1 ? "book" : "books"} in your
+        library
+      </p>
+
+      {/* Display the list of books */}
+      {books.length === 0 ? (
+        <p className="empty-state">
+          No books yet - add one below to get started!
+        </p>
+      ) : (
+        <ul className="book-list">
+          {" "}
+          {books.map((book) => (
+            <li key={book.id} className="book-item">
+              <div className="book-info">
+                <h3>{book.title}</h3>
+                <p>by {book.author}</p>
+                <p>Published: {book.year}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
