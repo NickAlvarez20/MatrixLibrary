@@ -14,17 +14,27 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+  font-family: "Segoe UI", Roboto, system-ui, sans-serif;
   background: var(--bg-gradient);
   color: var(--text-primary);
   min-height: 100vh;
 }
 
+/* Main container — full width with responsive inner content */
 #root {
-  max-width: 1000px;
+  width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  box-sizing: border-box;
+}
+
+/* Content wrapper — controls max width and centering */
+.content-wrapper {
+  max-width: 1000px;
+  width: 80%;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
 h1 {
@@ -43,10 +53,15 @@ h1 {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   border: 1px solid var(--card-border);
   margin-bottom: 3rem;
+  width: 80%;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .form-card input {
-  width: 100%;
+  width: 80%;
+  max-width: 500px;
   padding: 1rem 1.5rem;
   font-size: 1.2rem;
   background: rgba(255, 255, 255, 0.2);
@@ -54,7 +69,9 @@ h1 {
   border-radius: 12px;
   color: white;
   outline: none;
-  margin-bottom: 1rem;
+  margin: 0.8rem auto;
+  display: block;
+  box-sizing: border-box;
 }
 
 .form-card input:focus {
@@ -109,11 +126,10 @@ h1 {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
 }
 
-/* Center book info — key fix */
 .book-info {
   flex: 1;
   text-align: center;
-  min-width: 0; /* Allows text to wrap properly */
+  min-width: 0;
 }
 
 .book-info h3 {
@@ -151,7 +167,7 @@ h1 {
   margin-top: 4rem;
 }
 
-/* Responsive Design — Mobile First */
+/* Mobile First — Column layout on small screens */
 @media (max-width: 768px) {
   #root {
     padding: 1rem;
@@ -162,25 +178,29 @@ h1 {
   }
 
   .form-card {
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
+    width: 80%;
   }
 
-  .form-card input,
+  .form-card input {
+    width: 90%;
+  }
+
   .form-card button {
     font-size: 1.1rem;
-    padding: 14px 16px;
+    padding: 14px 18px;
   }
 
   .book-item {
-    flex-direction: column;
+    flex-direction: column; /* ← Stack vertically on mobile */
     text-align: center;
-    align-items: center;
     gap: 1rem;
+    align-items: center;
+    width: 80%;
   }
 
   .book-info {
-    flex: none;
-    width: 100%;
+    text-align: center;
   }
 
   .book-actions {
@@ -189,6 +209,7 @@ h1 {
   }
 }
 
+/* Extra small phones */
 @media (max-width: 480px) {
   h1 {
     font-size: 2.2rem;
@@ -205,13 +226,14 @@ h1 {
   }
 }
 
-/* Tablet & Desktop Fine-tuning */
+/* Tablet */
 @media (min-width: 769px) and (max-width: 1024px) {
   h1 {
     font-size: 3rem;
   }
 }
 
+/* Large Desktop */
 @media (min-width: 1025px) {
   h1 {
     font-size: 3.5rem;

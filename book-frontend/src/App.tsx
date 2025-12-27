@@ -11,6 +11,31 @@ type Book = {
 
 function App() {
   const [books, setBooks] = useState<Book[]>([]);
+  const [newBook, setNewBook] = useState({ title: "", author: "", year: "" });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newBook.title || !newBook.author || !newBook.year) return;
+
+    const response = await fetch("http://localhost:8080/books", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: newBook.title,
+        author: newBook.author,
+        year: parseInt(newBook.year) || 0,
+      }),
+    });
+
+    if (response.ok) {
+      const createdBook = await response.json();
+      setBooks([...books, createdBook]); // Instant Update!
+      setNewBook({ title: "", author: "", year: "" });
+    } else {
+      console.error("Failed to add new book");
+    }
+  };
+
   useEffect(() => {
     fetch("http://localhost:8080/books")
       .then((response) => {
@@ -28,31 +53,61 @@ function App() {
   }, []); // Empty array = run only once when component mounts
   return (
     <div>
-      <h1>My Book Library</h1>
-      <p className="book-count">
-        You have {books.length} {books.length === 1 ? "book" : "books"} in your
-        library
-      </p>
-
-      {/* Display the list of books */}
-      {books.length === 0 ? (
-        <p className="empty-state">
-          No books yet - add one below to get started!
+      <div className="content-wrapper">
+        <h1>My Book Library</h1>
+        <p className="book-count">
+          You have {books.length} {books.length === 1 ? "book" : "books"} in
+          your library
         </p>
-      ) : (
-        <ul className="book-list">
-          {" "}
-          {books.map((book) => (
-            <li key={book.id} className="book-item">
-              <div className="book-info">
-                <h3>{book.title}</h3>
-                <p>by {book.author}</p>
-                <p>Published: {book.year}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+        {/* Add Book Form */}
+        <div className="form-card">
+          <form onSubmit={handleSubmit} className="add-form">
+            <input
+              type="text"
+              placeholder="Book Title"
+              value={newBook.title}
+              onChange={(e) =>
+                setNewBook({ ...newBook, title: e.target.value })
+              }
+            />
+            <input
+              type="text"
+              placeholder="Author"
+              value={newBook.author}
+              onChange={(e) =>
+                setNewBook({ ...newBook, author: e.target.value })
+              }
+            />
+            <input
+              type="number"
+              placeholder="Year"
+              value={newBook.year}
+              onChange={(e) => setNewBook({ ...newBook, year: e.target.value })}
+            />
+            <button type="submit">Add Book</button>
+          </form>
+        </div>
+
+        {/* Display the list of books */}
+        {books.length === 0 ? (
+          <p className="empty-state">
+            No books yet - add one below to get started!
+          </p>
+        ) : (
+          <ul className="book-list">
+            {" "}
+            {books.map((book) => (
+              <li key={book.id} className="book-item">
+                <div className="book-info">
+                  <h3>{book.title}</h3>
+                  <p>by {book.author}</p>
+                  <p>Published: {book.year}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }
