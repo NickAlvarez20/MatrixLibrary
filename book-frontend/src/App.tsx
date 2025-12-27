@@ -14,6 +14,7 @@ function App() {
   const [newBook, setNewBook] = useState({ title: "", author: "", year: "" });
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editForm, setEditForm] = useState({ title: "", author: "", year: "" });
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,8 +87,37 @@ function App() {
         console.error("Error fetching books:", error);
       });
   }, []); // Empty array = run only once when component mounts
+
+  const filteredBooks = books.filter(
+    (book) =>
+      book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      book.author.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div>
+      {/* Search Bar */}
+      <div
+        className="form-card"
+        style={{ marginTop: "0", marginBottom: "30px" }}
+      >
+        <input
+          type="text"
+          placeholder="Search by title or author..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "16px 20px",
+            fontSize: "1.2rem",
+            background: "rgba(255, 255, 255, 0.2)",
+            border: "2px solid rgba(255,255,255,0.4)",
+            borderRadius: "12px",
+            color: "white",
+            outline: "none",
+          }}
+        />
+      </div>
       <div className="content-wrapper">
         <h1>My Book Library</h1>
         <p className="book-count">
@@ -124,14 +154,15 @@ function App() {
         </div>
 
         {/* Display the list of books */}
-        {books.length === 0 ? (
+        {filteredBooks.length === 0 ? (
           <p className="empty-state">
-            No books yet - add one below to get started!
+            {searchTerm
+              ? `No books found matching "${searchTerm}"`
+              : "No books yet — add your first one!"}
           </p>
         ) : (
           <ul className="book-list">
-            {" "}
-            {books.map((book) => (
+            {filteredBooks.map((book) => (
               <li key={book.id} className="book-item">
                 {editingId === book.id ? (
                   <form
