@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/glebarez/sqlite"
@@ -60,9 +61,55 @@ func createBook(c *gin.Context) {
 	c.JSON(http.StatusCreated, input)
 }
 
-// Done Step 4:
+// Step 5: Add update and deleteBook handlers
+// updateBook by ID || PUT /books/:id - update an existing book
+func updateBook(c *gin.Context) {
 
-// Prepare for Step 5: Add PUT(update books by id) and DELETE(delete book by id)-- Full CRUD learnings
+	idStr := c.Param("id")         // Gets the :id from the URL (e.g., "5" from /books/5)
+	id, err := strconv.Atoi(idStr) // Converts the string ID to an integer
+	if err != nil || id < 1 {      // Checks if conversion failed or ID is invalid
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"}) // Returns 400 if ID is bad
+		return
+	}
+
+	var existing Book                                           // Creates a variable to hold the book from DB
+	if result := db.First(&existing, id); result.Error != nil { // If query results in an error, then...
+		c.JSON(http.StatusNotFound, gin.H{"error": "Book not found"}) // Returns 404 if book doesn't exists
+		return
+	}
+
+	var input Book // Creates a variable for the incoming JSON data
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()}) // Returns 400 if JSON is invalid or validations fails
+		return
+	}
+
+	db.Model(&existing).Updates(input) // Updates only the fields (data shape) provided in input (partial updates)
+
+	c.JSON(http.StatusOK, existing) // Returns the updated book with 200 OK
+
+}
+
+// deleteBook by ID || DELETE  /books/:id - delete an existing book
+func deleteBook(c *gin.Context) {
+	// Extract logic from update and repeats logic here
+	idStr := c.Param("id")         // Gets the :id from the URL (e.g., "5" from /books/5)
+	id, err := strconv.Atoi(idStr) // Converts the string ID to an integer
+	if err != nil || id < 1 {      // Checks if conversion failed or ID is invalid
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"}) // Returns 400 if ID is bad
+		return
+	}
+	// Extract logic from update and repeats logic here
+	var book Book                                           // Creates a variable to hold the book we're deleting
+	if result := db.First(&book, id); result.Error != nil { // If query results in an error, then...
+		c.JSON(http.StatusNotFound, gin.H{"error": "Book not found"}) // Returns 404 if book doesn't exists
+		return
+	}
+
+	db.Delete(&book) // Permanently deletes the book from the db
+
+	c.JSON(http.StatusOK, gin.H{"message": "Book deleted successfully"}) // Returns JSON success message
+}
 
 // Setup the Gin server and first route (GET /books)
 func main() {
@@ -75,6 +122,12 @@ func main() {
 
 	// Create second route: POST / books -> creates a new book
 	r.POST("/books", createBook)
+
+	// Create third route: PUT /books/:id -> updates book by id
+	r.PUT("/books/:id", updateBook)
+
+	// Create fourth route: DELETE /books/:id -> deletes book by id
+	r.DELETE("/books/:id", deleteBook)
 
 	// Start server
 	r.Run(":8080") // Listen on http://localhost:8080
