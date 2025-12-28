@@ -29,10 +29,12 @@ Additional libraries are managed via Go modules (Gin, GORM, SQLite driver).
 ## Features
 This MatrixLibrary includes these features:
 
-*RESTful endpoints for managing books (CRUD operations)
-*Backend API powered by Go, Gin, and GORM
-*SQLite database persistence
-*Stylish Matrix-themed frontend interface
+* RESTful endpoints for managing books (CRUD operations)
+* Backend API powered by Go, Gin, and GORM
+* SQLite database persistence
+* Stylish Matrix-themed frontend interface
+
+* 
 ## Getting Started & Installation
 
 
