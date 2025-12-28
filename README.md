@@ -22,7 +22,7 @@ MatrixLibrary Project
 ## About
 MatrixLibrary is a modern RESTful Book Library API built in Go using the Gin web framework and GORM ORM with SQLite as the database. It includes a frontend styled with a cool Matrix-inspired terminal aesthetic.
 ## Prerequisites
-To run this project you need Go installed on your system.
+To run this project you need Go, React, and TypeScript installed on your system.
 Additional libraries are managed via Go modules (Gin, GORM, SQLite driver).
 
 
