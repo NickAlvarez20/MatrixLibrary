@@ -34,7 +34,7 @@ This MatrixLibrary includes these features:
 * SQLite database persistence
 * Stylish Matrix-themed frontend interface
 
-* 
+
 ## Getting Started & Installation
 
 
@@ -50,10 +50,10 @@ Run the Go script from the command line:
 ## Learning Outcomes
 This project helped me:
 
-*Build a full-stack RESTful API in Go 
-*Work with Gin for routing and GORM for database interactions
-*Integrate a React-TypeScript frontend with a Go backend and learn more about useState/useEffect, preventDefault, conditional form logic creation through booleans and ternary expressions, guard clauses, http methods, library function implementation, server routing, and applying efficient logic in api endpoints
-*Implement CRUD operations and database management
+* Build a full-stack RESTful API in Go 
+* Work with Gin for routing and GORM for database interactions
+* Integrate a React-TypeScript frontend with a Go backend and learn more about useState/useEffect, preventDefault, conditional form logic creation through booleans and ternary expressions, guard clauses, http methods, library function implementation, server routing, and applying efficient logic in api endpoints
+* Implement CRUD operations and database management
 
 ## Contributing
 This is primarily a personal learning / portfolio repository, so formal contributions aren’t required. However, if you spot bugs, have project ideas, or want to add improvements, feel free to:
@@ -62,7 +62,7 @@ This is primarily a personal learning / portfolio repository, so formal contribu
 3. Submit a pull request Please include clear explanations of your changes and test any new code.
 ## License
 This repository is open and free for educational use.
-*(If you decide on a specific license later, insert it here — e.g. MIT, Apache 2.0, etc.)*
+* (If you decide on a specific license later, insert it here — e.g. MIT, Apache 2.0, etc.)*
 ## Credits & Acknowledgements
 This project was created by NickAlvarez20 as part of my journey to learn Go, React, TypeScript, API, Database, Server, and HTTP Method programming. Check out my other repositories to see more of my work!
 ## Contact
