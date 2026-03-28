@@ -105,7 +105,7 @@ func deleteBook(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Book not found"})
 		return
 	}
-
+//  check 
 	db.Delete(&book)
 	c.JSON(http.StatusOK, gin.H{"message": "Book deleted successfully"})
 }
