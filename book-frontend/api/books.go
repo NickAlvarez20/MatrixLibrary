@@ -118,7 +118,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	router := gin.New()
 	router.Use(gin.Recovery())
 
-	// API routes
+	// API routes - router 
 	router.GET("/api/books", getBooks)
 	router.POST("/api/books", createBook)
 	router.PUT("/api/books/:id", updateBook)
