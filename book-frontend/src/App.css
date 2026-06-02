@@ -15,6 +15,7 @@
 body {
   margin: 0;
   padding: 0;
+  display: block;
   font-family: "Courier New", monospace; /* Cyberpunk terminal feel */
   background: var(--bg-dark);
   color: var(--text-primary);
@@ -26,90 +27,93 @@ body {
 #root::before {
   content: "";
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: linear-gradient(to bottom, transparent 0%, var(--bg-deep) 100%);
+  inset: 0;
+  background: var(--bg-deep);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Digital rain — continuous vertical streams, GPU-composited, seamless loop */
+.matrix-rain {
+  position: fixed;
+  inset: 0;
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
 }
 
-#root::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--neon-glow) 50%,
-    transparent
-  );
-  opacity: 0.03;
-  animation: scanline 8s linear infinite;
-  pointer-events: none;
-  z-index: 1;
-}
-
-@keyframes scanline {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(100%);
-  }
-}
-
-/* Digital rain columns */
-.matrix-rain {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.matrix-rain span {
+.matrix-column {
   position: absolute;
-  color: var(--neon-primary);
-  font-family: monospace;
-  font-size: 1.2rem;
-  opacity: 0.4;
-  animation: fall linear infinite;
-  white-space: nowrap;
+  top: 0;
+  left: var(--column-left);
+  transform: translate3d(-50%, 0, 0);
+  opacity: 0.38;
 }
 
-@keyframes fall {
+.matrix-track {
+  display: flex;
+  flex-direction: column;
+  animation: matrix-scroll var(--fall-duration) linear infinite;
+  animation-delay: var(--fall-delay);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Continuous green stream — solid colors, no background-clip artifacts */
+.matrix-stream {
+  display: block;
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  line-height: 1.08;
+  font-family: "Courier New", monospace;
+  font-size: var(--char-size);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  user-select: none;
+  color: var(--neon-primary);
+  text-shadow: 0 0 8px rgba(57, 255, 20, 0.45);
+}
+
+.matrix-stream::first-line {
+  color: #ffffff;
+  text-shadow:
+    0 0 8px #ffffff,
+    0 0 16px var(--neon-bright),
+    0 0 28px var(--neon-glow);
+}
+
+/* Seamless loop: two identical streams, scroll exactly one stream height */
+@keyframes matrix-scroll {
   0% {
-    transform: translateY(-100vh);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.8;
-  }
-  90% {
-    opacity: 0.8;
+    transform: translate3d(0, -50%, 0);
   }
   100% {
-    transform: translateY(100vh);
-    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .matrix-track {
+    animation: none;
   }
 }
 
 #root {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   width: 100%;
+  min-height: 100vh;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
   box-sizing: border-box;
+}
+
+.app-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
 }
 
 .content-wrapper {
@@ -152,6 +156,8 @@ h1 {
 
 /* Search Bar */
 .search-bar-container {
+  position: relative;
+  z-index: 1;
   max-width: 700px;
   width: 90%;
   margin: 0 auto 40px auto;
@@ -178,7 +184,7 @@ h1 {
   box-shadow: 0 0 30px var(--neon-glow), inset 0 0 20px rgba(57, 255, 20, 0.2);
 }
 
-/* Book Cards - Unique holographic covers */
+/* Book Cards */
 .book-item {
   position: relative;
   background: var(--card-bg);
@@ -192,23 +198,6 @@ h1 {
   overflow: hidden;
   transition: all 0.4s ease;
   box-sizing: border-box;
-}
-
-/* Unique holographic book cover per card */
-.book-item::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 140px;
-  height: 200px;
-  background: linear-gradient(135deg, #001a00, var(--neon-primary), #003300);
-  border-radius: 8px;
-  transform: translate(-50%, -50%) rotate(-12deg) perspective(500px);
-  box-shadow: 0 0 40px var(--neon-glow);
-  opacity: 0.2;
-  z-index: -1;
-  animation: floatBook 10s ease-in-out infinite;
 }
 
 /* Glitch stripes & variation per card */
@@ -232,16 +221,6 @@ h1 {
 }
 
 /* Unique variations using nth-child */
-.book-item:nth-child(odd)::before {
-  transform: translate(-50%, -50%) rotate(12deg) scale(0.9);
-}
-.book-item:nth-child(3n)::before {
-  background: linear-gradient(45deg, #001a00, #00ff41, #003300);
-}
-.book-item:nth-child(4n)::before {
-  animation-duration: 8s;
-  opacity: 0.25;
-}
 .book-item:nth-child(5n)::after {
   background: repeating-linear-gradient(
     0deg,
@@ -250,16 +229,6 @@ h1 {
     #00ff41 10px,
     #00ff41 11px
   );
-}
-
-@keyframes floatBook {
-  0%,
-  100% {
-    transform: translate(-50%, -50%) translateY(0) rotate(-12deg);
-  }
-  50% {
-    transform: translate(-50%, -50%) translateY(-20px) rotate(-12deg);
-  }
 }
 
 @keyframes glitchStripe {
@@ -277,7 +246,6 @@ h1 {
   border-color: var(--neon-bright);
 }
 
-.book-item:hover::before,
 .book-item:hover::after {
   opacity: 0.4;
 }
@@ -323,6 +291,32 @@ h1 {
   gap: 1rem;
 }
 
+.form-card input,
+.add-form input,
+.book-item input {
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  font-family: inherit;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.form-card input:focus,
+.add-form input:focus,
+.book-item input:focus {
+  border-color: var(--neon-bright);
+  box-shadow: 0 0 20px rgba(57, 255, 20, 0.35);
+}
+
+.book-item input {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--neon-primary);
+  color: var(--text-primary);
+  box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
+  width: 100%;
+}
+
 .form-card input {
   background: rgba(0, 0, 0, 0.5);
   border: 1px solid var(--neon-primary);
@@ -330,6 +324,14 @@ h1 {
   box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
   width: 100%;
   box-sizing: border-box;
+}
+
+.book-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
 }
 
 .form-card button,
@@ -398,10 +400,6 @@ h1 {
   }
   .book-item {
     padding: 1.5rem;
-  }
-  .book-item::before {
-    width: 100px;
-    height: 140px;
   }
   .content-wrapper h1 {
     font-size: 3rem;

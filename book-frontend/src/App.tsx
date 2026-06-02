@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./App.css";
+import MatrixRain from "./MatrixRain";
 
 // Define a TypeScript type called Book
 type Book = {
@@ -95,147 +96,135 @@ function App() {
   );
 
   return (
-    <div>
-      {/* Search Bar — responsive and centered */}
-      <div className="search-bar-container">
-        <input
-          type="text"
-          placeholder="Search by title or author..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-      <div className="matrix-rain">
-        {Array.from({ length: 20 }).map((_, i) => (
-          <span
-            key={i}
-            style={{
-              left: `${i * 5}%`,
-              animationDelay: `${Math.random() * 10}s`,
-              animationDuration: `${10 + Math.random() * 20}s`,
-            }}
-          >
-            {Array.from({ length: 20 })
-              .map(() => String.fromCharCode(0x30a0 + Math.random() * 96))
-              .join("")}
-          </span>
-        ))}
-      </div>
-      <div className="content-wrapper">
-        <h1>My Book Library</h1>
-        <p className="book-count">
-          You have {books.length} {books.length === 1 ? "book" : "books"} in
-          your library
-        </p>
-        {/* Add Book Form */}
-        <div className="form-card">
-          <form onSubmit={handleSubmit} className="add-form">
-            <input
-              type="text"
-              placeholder="Book Title"
-              value={newBook.title}
-              onChange={(e) =>
-                setNewBook({ ...newBook, title: e.target.value })
-              }
-            />
-            <input
-              type="text"
-              placeholder="Author"
-              value={newBook.author}
-              onChange={(e) =>
-                setNewBook({ ...newBook, author: e.target.value })
-              }
-            />
-            <input
-              type="number"
-              placeholder="Year"
-              value={newBook.year}
-              onChange={(e) => setNewBook({ ...newBook, year: e.target.value })}
-            />
-            <button type="submit">Add Book</button>
-          </form>
+    <>
+      <MatrixRain />
+      <div className="app-content">
+        <div className="search-bar-container">
+          <input
+            type="text"
+            placeholder="Search by title or author..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
-
-        {/* Display the list of books */}
-        {filteredBooks.length === 0 ? (
-          <p className="empty-state">
-            {searchTerm
-              ? `No books found matching "${searchTerm}"`
-              : "No books yet — add your first one!"}
+        <div className="content-wrapper">
+          <h1>My Book Library</h1>
+          <p className="book-count">
+            You have {books.length} {books.length === 1 ? "book" : "books"} in
+            your library
           </p>
-        ) : (
-          <ul className="book-list">
-            {filteredBooks.map((book) => (
-              <li key={book.id} className="book-item">
-                {editingId === book.id ? (
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      handleUpdate(book.id);
-                    }}
-                    className="add-form"
-                  >
-                    <input
-                      type="text"
-                      value={editForm.title}
-                      placeholder={book.title}
-                      onChange={(e) =>
-                        setEditForm({ ...editForm, title: e.target.value })
-                      }
-                    />
-                    <input
-                      type="text"
-                      value={editForm.author}
-                      placeholder={book.author}
-                      onChange={(e) =>
-                        setEditForm({ ...editForm, author: e.target.value })
-                      }
-                    />
-                    <input
-                      type="number"
-                      value={editForm.year}
-                      placeholder={book.year.toString()}
-                      onChange={(e) =>
-                        setEditForm({ ...editForm, year: e.target.value })
-                      }
-                    />
-                    <button type="submit">Save</button>
-                    <button type="button" onClick={() => setEditingId(null)}>
-                      Cancel
-                    </button>
-                  </form>
-                ) : (
-                  <>
-                    <div className="book-info">
-                      <h3>{book.title}</h3>
-                      <p>by {book.author}</p>
-                      <p>Published: {book.year}</p>
-                    </div>
-                    <div className="book-actions">
-                      <button
-                        onClick={() => {
-                          setEditingId(book.id);
-                          setEditForm({
-                            title: book.title,
-                            author: book.author,
-                            year: book.year.toString(),
-                          });
-                        }}
-                      >
-                        Edit
+          {/* Add Book Form */}
+          <div className="form-card">
+            <form onSubmit={handleSubmit} className="add-form">
+              <input
+                type="text"
+                placeholder="Book Title"
+                value={newBook.title}
+                onChange={(e) =>
+                  setNewBook({ ...newBook, title: e.target.value })
+                }
+              />
+              <input
+                type="text"
+                placeholder="Author"
+                value={newBook.author}
+                onChange={(e) =>
+                  setNewBook({ ...newBook, author: e.target.value })
+                }
+              />
+              <input
+                type="number"
+                placeholder="Year"
+                value={newBook.year}
+                onChange={(e) =>
+                  setNewBook({ ...newBook, year: e.target.value })
+                }
+              />
+              <button type="submit">Add Book</button>
+            </form>
+          </div>
+
+          {/* Display the list of books */}
+          {filteredBooks.length === 0 ? (
+            <p className="empty-state">
+              {searchTerm
+                ? `No books found matching "${searchTerm}"`
+                : "No books yet — add your first one!"}
+            </p>
+          ) : (
+            <ul className="book-list">
+              {filteredBooks.map((book) => (
+                <li key={book.id} className="book-item">
+                  {editingId === book.id ? (
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        handleUpdate(book.id);
+                      }}
+                      className="add-form"
+                    >
+                      <input
+                        type="text"
+                        value={editForm.title}
+                        placeholder={book.title}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, title: e.target.value })
+                        }
+                      />
+                      <input
+                        type="text"
+                        value={editForm.author}
+                        placeholder={book.author}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, author: e.target.value })
+                        }
+                      />
+                      <input
+                        type="number"
+                        value={editForm.year}
+                        placeholder={book.year.toString()}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, year: e.target.value })
+                        }
+                      />
+                      <button type="submit">Save</button>
+                      <button type="button" onClick={() => setEditingId(null)}>
+                        Cancel
                       </button>
-                      <button onClick={() => handleDelete(book.id)}>
-                        Delete
-                      </button>
-                    </div>
-                  </>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
+                    </form>
+                  ) : (
+                    <>
+                      <div className="book-info">
+                        <h3>{book.title}</h3>
+                        <p>by {book.author}</p>
+                        <p>Published: {book.year}</p>
+                      </div>
+                      <div className="book-actions">
+                        <button
+                          onClick={() => {
+                            setEditingId(book.id);
+                            setEditForm({
+                              title: book.title,
+                              author: book.author,
+                              year: book.year.toString(),
+                            });
+                          }}
+                        >
+                          Edit
+                        </button>
+                        <button onClick={() => handleDelete(book.id)}>
+                          Delete
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
